@@ -2,16 +2,29 @@ const express = require('express');
 const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
+const sql = require('mssql');
 const path = require('path');
 
 const bookRouter = require('./src/routes/bookRoutes');
 
 const app = express();
+const config = {
+  user: 'library',
+  password: 'j8Z3Vge!hl',
+  server: 'cstone-pslibrary.database.windows.net',
+  database: 'PSLibrary',
+
+  options: {
+    encrypt: true // Use this if you're on Windows Azure
+  }
+};
 const nav = [
   { link: '/books', title: 'Books' },
   { link: '/authors', title: 'Authors' }
 ];
 const port = process.env.PORT || 3000;
+
+sql.connect(config).catch(err => debug(err));
 
 app.use(morgan('tiny'));
 app.use(express.static(path.join(__dirname, 'public')));
