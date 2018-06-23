@@ -1,25 +1,16 @@
 const express = require('express');
+const sql = require('mssql');
+const debug = require('debug')('app:bookRoutes');
+
+const bookRouter = express.Router();
 
 function router(nav) {
-  const bookRouter = express.Router();
-
-  const books = [
-    {
-      title: 'War and Peace',
-      genre: 'Historical Fiction',
-      author: 'Lev Nikolayevich Tolstoy',
-      read: false
-    },
-    {
-      title: 'Les Miseables',
-      genre: 'Historical Fiction',
-      author: 'Victor Hugo',
-      read: false
-    }
-  ];
-
   bookRouter.route('/')
-    .get((req, res) => {
+    .get(async (req, res) => {
+      const request = new sql.Request();
+      const { recordset: books } = await request.query('select * from books');
+      debug(books);
+
       res.render(
         'bookListView',
         {
@@ -31,15 +22,24 @@ function router(nav) {
     });
 
   bookRouter.route('/:id')
-    .get((req, res) => {
+    .all(async (req, res, next) => {
       const { id } = req.params;
-
+      const request = new sql.Request();
+      const { recordset: books } = await request
+        .input('id', sql.Int, id)
+        .query('select * from books where id = @id');
+      debug(books);
+      [req.book] = books;
+      next();
+    })
+    .get(async (req, res) => {
+      const { book } = req;
       res.render(
         'bookView',
         {
-          book: books[id],
+          book,
           nav,
-          title: books[id].title
+          title: book.title
         }
       );
     });
