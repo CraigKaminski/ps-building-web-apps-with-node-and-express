@@ -4,6 +4,8 @@ const debug = require('debug')('app');
 const morgan = require('morgan');
 const sql = require('mssql');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const path = require('path');
 
 const adminRouter = require('./src/routes/adminRoutes');
@@ -29,6 +31,9 @@ const port = process.env.PORT || 3000;
 sql.connect(config).catch(err => debug(err));
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(session({ secret: 'library', resave: true, saveUninitialized: true }));
+require('./src/config/passport.js')(app);
 app.use(morgan('tiny'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
