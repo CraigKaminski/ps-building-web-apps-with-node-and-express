@@ -27,7 +27,7 @@ function router(nav) {
       const request = new sql.Request();
       const { recordset: books } = await request
         .input('id', sql.Int, id)
-        .query('select * from books where id = @id');
+        .query('select * from books where ID = @id');
       debug(books);
       [req.book] = books;
       next();
@@ -39,7 +39,7 @@ function router(nav) {
         {
           book,
           nav,
-          title: book.title
+          title: book.TITLE
         }
       );
     });
