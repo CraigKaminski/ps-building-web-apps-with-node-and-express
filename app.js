@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
 const sql = require('mssql');
+const bodyParser = require('body-parser');
 const path = require('path');
 
 const bookRouter = require('./src/routes/bookRoutes');
@@ -26,6 +27,7 @@ const port = process.env.PORT || 3000;
 
 sql.connect(config).catch(err => debug(err));
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('tiny'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));

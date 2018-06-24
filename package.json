@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/CraigKaminski/ps-building-web-apps-with-node-and-express#readme",
   "dependencies": {
+    "body-parser": "1.18.3",
     "bootstrap": "3.3.7",
     "chalk": "2.4.1",
     "cross-env": "5.2.0",
