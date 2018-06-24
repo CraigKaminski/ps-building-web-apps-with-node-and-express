@@ -9,6 +9,7 @@ const session = require('express-session');
 const path = require('path');
 
 const adminRouter = require('./src/routes/adminRoutes');
+const authRouter = require('./src/routes/authRoutes');
 const bookRouter = require('./src/routes/bookRoutes');
 
 const app = express();
@@ -45,6 +46,7 @@ app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 app.use('/admin', adminRouter(nav));
+app.use('/auth', authRouter(nav));
 app.use('/books', bookRouter(nav));
 
 app.get('/', (req, res) => {
