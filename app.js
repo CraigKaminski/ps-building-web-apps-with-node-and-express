@@ -6,6 +6,7 @@ const sql = require('mssql');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+const adminRouter = require('./src/routes/adminRoutes');
 const bookRouter = require('./src/routes/bookRoutes');
 
 const app = express();
@@ -38,7 +39,9 @@ app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
+app.use('/admin', adminRouter(nav));
 app.use('/books', bookRouter(nav));
+
 app.get('/', (req, res) => {
   res.render(
     'index',
