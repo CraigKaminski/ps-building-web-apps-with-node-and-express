@@ -16,7 +16,7 @@ function router(nav) {
         .input('password', sql.VarChar, password)
         .query('insert into users values (@username, @password)');
       req.login(req.body, () => {
-        res.redirect('/auth/profile');
+        res.redirect('/books');
       });
     });
 
@@ -28,7 +28,7 @@ function router(nav) {
       });
     })
     .post(passport.authenticate('local', {
-      successRedirect: '/auth/profile',
+      successRedirect: '/books',
       failureRedirect: '/'
     }));
 
